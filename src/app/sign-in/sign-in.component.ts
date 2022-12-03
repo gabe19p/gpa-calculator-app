@@ -9,7 +9,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SignInService } from '../sign-in.service';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 
 @Component({
@@ -31,7 +31,15 @@ export class SignInComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.signinForm = this.fb.group({ studentId: '' });
+    this.signinForm = this.fb.group({
+      studentId: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('^[0-9]*$'),
+        ]),
+      ],
+    });
   }
 
   onSubmit() {
@@ -44,5 +52,9 @@ export class SignInComponent implements OnInit {
     } else {
       this.errorMessage = `Invalid studentId, please try again`;
     }
+  }
+
+  get form() {
+    return this.signinForm.controls;
   }
 }

@@ -19,7 +19,7 @@ export class BaseLayoutComponent implements OnInit {
   assignment: string;
 
   constructor(private router: Router, private cookieService: CookieService) {
-    this.assignment = 'Exercise 7.2 - Reactive Forms';
+    this.assignment = 'GPA Calculator';
   }
 
   ngOnInit(): void {}

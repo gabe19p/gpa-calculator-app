@@ -8,6 +8,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { ITranscript } from '../transcript.interface';
+import { FormGroup, FormBuilder, Validators, Form } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -15,7 +16,9 @@ import { ITranscript } from '../transcript.interface';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
-  transcriptEntry: ITranscript;
+  transcriptForm: FormGroup;
+  transcriptEntries: Array<ITranscript> = [];
+  gpaTotal: number = 0;
   selectableGrades: Array<string> = [
     'A',
     'A-',
@@ -30,18 +33,27 @@ export class HomeComponent implements OnInit {
     'D-',
     'F',
   ];
-  transcriptEntries: Array<ITranscript> = [];
-  gpaTotal: number = 0;
 
-  constructor() {
-    this.transcriptEntry = {} as ITranscript;
+  constructor(private fb: FormBuilder) {}
+
+  ngOnInit(): void {
+    this.transcriptForm = this.fb.group({
+      course: ['', Validators.required],
+      grade: ['', Validators.required],
+    });
   }
 
-  ngOnInit(): void {}
+  get form() {
+    return this.transcriptForm.controls;
+  }
 
-  saveEntry() {
-    this.transcriptEntries.push(this.transcriptEntry);
-    this.transcriptEntry = {} as ITranscript;
+  onSubmit(event) {
+    this.transcriptEntries.push({
+      course: this.form.course.value,
+      grade: this.form.grade.value,
+    });
+
+    event.currentTarget.reset();
   }
 
   calculateResults() {

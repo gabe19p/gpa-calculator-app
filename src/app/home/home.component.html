@@ -6,7 +6,12 @@
       <mat-card-title> Grade Entry </mat-card-title>
 
       <mat-card-content>
-        <form fxLayout="column" fxLayoutGap="16px">
+        <form
+          [formGroup]="transcriptForm"
+          (ngSubmit)="onSubmit($event); transcriptForm.reset()"
+          fxLayout="column"
+          fxLayoutGap="16px"
+        >
           <!-- course name field -->
           <mat-form-field fxFlex appearance="fill">
             <mat-label>Course</mat-label>
@@ -16,17 +21,13 @@
               required
               id="txtCourse"
               matInput
-              [(ngModel)]="transcriptEntry.course"
+              formControlName="course"
             />
           </mat-form-field>
 
           <!-- letter grade selection field -->
           <mat-form-field fxFlex appearance="fill">
-            <mat-select
-              name="selectGrade"
-              [(ngModel)]="transcriptEntry.grade"
-              required=""
-            >
+            <mat-select name="selectGrade" formControlName="grade" required>
               <mat-option
                 *ngFor="let grade of selectableGrades"
                 [value]="grade"
@@ -35,12 +36,14 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
+          <!-- save button -->
           <button
+            type="submit"
             mat-raised-button
             color="primary"
             type="submit"
             id="btnSave"
-            (click)="saveEntry()"
+            [disabled]="!transcriptForm.valid"
           >
             Save
           </button>
